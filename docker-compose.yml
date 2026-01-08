@@ -1,0 +1,50 @@
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress-cms
+    ports:
+      - "8000:80"
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_TABLE_PREFIX: wp_
+      WORDPRESS_DEBUG: 'true'
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - cms-network
+    depends_on:
+      - flask-backend
+    restart: unless-stopped
+
+  flask-backend:
+    build:
+      context: ./flask-backend
+      dockerfile: Dockerfile
+    container_name: flask-cms
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: app.py
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_KEY: ${SUPABASE_KEY}
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      WORDPRESS_URL: ${WORDPRESS_URL}
+      JWT_SECRET: ${JWT_SECRET}
+    volumes:
+      - ./flask-backend:/app
+    networks:
+      - cms-network
+    restart: unless-stopped
+
+networks:
+  cms-network:
+    driver: bridge
+
+volumes:
+  wordpress_data:
+    driver: local
