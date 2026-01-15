@@ -2,6 +2,11 @@ import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from app.models import Article, Product, TeamMember
 from app import db
+from app.wordpress_client import WordPressGraphQLClient
+import os
+
+
+wp_client = WordPressGraphQLClient(os.getenv('WORDPRESS_URL', 'http://wordpress:80'))
 
 
 class ArticleType(SQLAlchemyObjectType):
@@ -22,6 +27,25 @@ class TeamMemberType(SQLAlchemyObjectType):
         interfaces = (graphene.relay.Node,)
 
 
+class WordPressPostType(graphene.ObjectType):
+    id = graphene.String()
+    database_id = graphene.Int()
+    title = graphene.String()
+    content = graphene.String()
+    excerpt = graphene.String()
+    date = graphene.String()
+    author = graphene.String()
+    categories = graphene.List(graphene.String)
+
+
+class WordPressPageType(graphene.ObjectType):
+    id = graphene.String()
+    database_id = graphene.Int()
+    title = graphene.String()
+    content = graphene.String()
+    date = graphene.String()
+
+
 class Query(graphene.ObjectType):
     all_articles = graphene.List(ArticleType)
     article = graphene.Field(ArticleType, id=graphene.Int(required=True))
@@ -31,6 +55,11 @@ class Query(graphene.ObjectType):
     
     all_team_members = graphene.List(TeamMemberType)
     team_member = graphene.Field(TeamMemberType, id=graphene.Int(required=True))
+    
+    wordpress_posts = graphene.List(WordPressPostType, first=graphene.Int(default_value=10))
+    wordpress_post = graphene.Field(WordPressPostType, id=graphene.Int(required=True))
+    
+    wordpress_pages = graphene.List(WordPressPageType, first=graphene.Int(default_value=10))
     
     def resolve_all_articles(self, info):
         return Article.query.all()
@@ -49,6 +78,51 @@ class Query(graphene.ObjectType):
     
     def resolve_team_member(self, info, id):
         return TeamMember.query.get(id)
+    
+    def resolve_wordpress_posts(self, info, first=10):
+        posts = wp_client.get_posts(first=first)
+        return [
+            WordPressPostType(
+                id=post.get('id'),
+                database_id=post.get('databaseId'),
+                title=post.get('title'),
+                content=post.get('content'),
+                excerpt=post.get('excerpt'),
+                date=post.get('date'),
+                author=post.get('author', {}).get('node', {}).get('name') if post.get('author') else None,
+                categories=[cat.get('name') for cat in post.get('categories', {}).get('nodes', [])]
+            )
+            for post in posts
+        ]
+    
+    def resolve_wordpress_post(self, info, id):
+        post = wp_client.get_post_by_id(id)
+        if not post:
+            return None
+        
+        return WordPressPostType(
+            id=post.get('id'),
+            database_id=post.get('databaseId'),
+            title=post.get('title'),
+            content=post.get('content'),
+            excerpt=post.get('excerpt'),
+            date=post.get('date'),
+            author=post.get('author', {}).get('node', {}).get('name') if post.get('author') else None,
+            categories=[cat.get('name') for cat in post.get('categories', {}).get('nodes', [])]
+        )
+    
+    def resolve_wordpress_pages(self, info, first=10):
+        pages = wp_client.get_pages(first=first)
+        return [
+            WordPressPageType(
+                id=page.get('id'),
+                database_id=page.get('databaseId'),
+                title=page.get('title'),
+                content=page.get('content'),
+                date=page.get('date')
+            )
+            for page in pages
+        ]
 
 
 class CreateArticle(graphene.Mutation):
