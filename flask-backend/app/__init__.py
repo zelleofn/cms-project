@@ -34,6 +34,10 @@ def create_app(config_name='development'):
     app.register_blueprint(cache_bp)
     
    
+    from app.routes.auth import auth_bp
+    app.register_blueprint(auth_bp)
+
+
     from app.graphql.schema import schema
     
    
