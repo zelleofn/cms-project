@@ -38,7 +38,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
+      
   wordpress:
     image: wordpress:latest
     container_name: wordpress-cms
@@ -71,11 +71,22 @@ services:
     environment:
       FLASK_ENV: ${FLASK_ENV}
       FLASK_APP: app.py
+      SECRET_KEY: ${SECRET_KEY}
+      
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      
       WORDPRESS_DB_URL: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
-      REDIS_URL: ${REDIS_URL}
       WORDPRESS_URL: http://wordpress:80
-      JWT_SECRET: ${JWT_SECRET}
+      WORDPRESS_GRAPHQL_URL: http://wordpress:80/graphql
+      
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      CACHE_DEFAULT_TTL: ${CACHE_DEFAULT_TTL:-300}
+      
+      JWT_SECRET_KEY: ${JWT_SECRET}
+      
+      ADMIN_TOKEN: ${ADMIN_TOKEN}
     volumes:
       - ./flask-backend:/app
     networks:
