@@ -83,6 +83,12 @@ class QueryType(graphene.ObjectType):
         category=graphene.String(),
         resolver=Query.resolve_products
     )
+
+    product = graphene.Field(
+        ProductType,
+        product_id=graphene.Int(required=True),
+        resolver=Query.resolve_product 
+    )
     
     team_members = graphene.List(
         TeamMemberType,

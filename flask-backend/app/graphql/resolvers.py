@@ -122,6 +122,22 @@ class Query:
         except Exception as e:
             print(f"Error fetching products: {e}")
             return []
+
+    @staticmethod
+    def resolve_product(root, info, product_id: int) -> Optional[Product]:
+        try:
+            
+            product = Product.query.filter_by(id=product_id).first()
+            if not product:
+                
+                raise Exception("Product not found")
+            return product
+        except Exception as e:
+           
+            if str(e) == "Product not found":
+                raise e
+            print(f"Error fetching product: {e}")
+            return None        
     
     @staticmethod
     @cache_graphql_query(ttl=300, key_prefix="team")
