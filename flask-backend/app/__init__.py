@@ -4,6 +4,7 @@ from flask_cors import CORS
 from graphql_server.flask import GraphQLView
 from config import config
 from app.utils.cache import cache
+from app.utils.auth import require_auth 
 
 db = SQLAlchemy()
 
@@ -39,6 +40,16 @@ def create_app(config_name='development'):
 
 
     from app.graphql.schema import schema
+
+    from app.utils.auth import require_auth
+
+
+    @app.before_request
+        def check_graphql_auth():
+        if request.path == '/graphql' and request.method == 'POST':
+            auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return jsonify({'error': 'Authentication required'}), 401
     
    
     app.add_url_rule(
