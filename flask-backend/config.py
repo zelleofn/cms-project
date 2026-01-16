@@ -24,6 +24,7 @@ class Config:
    
     REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
     REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
+    
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', None)
     CACHE_DEFAULT_TTL = 300  
     REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}"
