@@ -1,0 +1,63 @@
+.home-container {
+  min-height: 100vh;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 3rem 0;
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+}
+
+.recent-posts,
+.wordpress-posts {
+  margin: 2rem 0;
+
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f44336;
+  padding: 2rem;
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+mat-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-content {
+  flex: 1;
+}

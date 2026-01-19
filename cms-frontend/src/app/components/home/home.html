@@ -1,1 +1,60 @@
-<p>home works!</p>
+<div class="home-container">
+  <mat-toolbar color="primary">
+    <h1>CMS Frontend</h1>
+  </mat-toolbar>
+
+  <div class="content">
+    <section class="hero">
+      <h2>Welcome to the Headless CMS</h2>
+      <p>Built with WordPress, Flask GraphQL, and Angular</p>
+      <button mat-raised-button color="accent" routerLink="/posts">
+        View All Posts
+      </button>
+    </section>
+
+    <mat-divider></mat-divider>
+
+    <section class="recent-posts">
+      <h3>Recent Articles</h3>
+      
+      <div *ngIf="loading" class="loading">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <div *ngIf="error" class="error">
+        <mat-icon>error</mat-icon>
+        <p>{{ error }}</p>
+      </div>
+
+      <mat-grid-list cols="3" rowHeight="2:1" gutterSize="16" *ngIf="!loading && !error">
+        <mat-grid-tile *ngFor="let article of articles">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>{{ article.title }}</mat-card-title>
+              <mat-card-subtitle>{{ article.author || 'Unknown' }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>{{ article.content | slice:0:150 }}...</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button [routerLink]="['/posts', article.id]">Read More</button>
+            </mat-card-actions>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </section>
+
+    <mat-divider></mat-divider>
+
+    <section class="wordpress-posts" *ngIf="wordpressPosts.length > 0">
+      <h3>From WordPress</h3>
+      <mat-list>
+        <mat-list-item *ngFor="let post of wordpressPosts">
+          <h4 matListItemTitle>{{ post.title }}</h4>
+          <p matListItemLine>{{ post.excerpt }}</p>
+          <p matListItemLine>By {{ post.authorName }}</p>
+        </mat-list-item>
+      </mat-list>
+    </section>
+  </div>
+</div>

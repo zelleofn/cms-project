@@ -1,1 +1,80 @@
-<p>navbar works!</p>
+<mat-toolbar color="primary" class="navbar">
+  <div class="navbar-container">
+    <!-- Logo / Brand -->
+    <div class="navbar-brand" routerLink="/">
+      <mat-icon>article</mat-icon>
+      <span>CMS Portal</span>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="navbar-links">
+      <button mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>home</mat-icon>
+        Home
+      </button>
+
+      <button mat-button routerLink="/posts" routerLinkActive="active">
+        <mat-icon>list</mat-icon>
+        Posts
+      </button>
+
+      <button mat-button routerLink="/admin" routerLinkActive="active" *ngIf="isAdmin">
+        <mat-icon>dashboard</mat-icon>
+        Admin
+      </button>
+    </div>
+
+    <span class="spacer"></span>
+
+    <!-- User Menu -->
+    <div class="navbar-user">
+      <!-- Not Authenticated -->
+      <ng-container *ngIf="!isAuthenticated">
+        <button mat-button routerLink="/login">
+          <mat-icon>login</mat-icon>
+          Sign In
+        </button>
+        <button mat-raised-button color="accent" routerLink="/register">
+          <mat-icon>person_add</mat-icon>
+          Sign Up
+        </button>
+      </ng-container>
+
+      <!-- Authenticated -->
+      <ng-container *ngIf="isAuthenticated">
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+
+        <mat-menu #userMenu="matMenu">
+          <div class="user-info" *ngIf="currentUser$ | async as user">
+            <div class="user-details">
+              <p class="user-name">{{ user.first_name }} {{ user.last_name }}</p>
+              <p class="user-email">{{ user.email }}</p>
+              <mat-chip *ngIf="user.is_admin" class="admin-badge">Admin</mat-chip>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </button>
+
+          <button mat-menu-item routerLink="/admin" *ngIf="isAdmin">
+            <mat-icon>dashboard</mat-icon>
+            <span>Admin Panel</span>
+          </button>
+
+          <mat-divider></mat-divider>
+
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+    </div>
+  </div>
+</mat-toolbar>

@@ -1,11 +1,66 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService, User } from '../../services/auth.service';
+import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatChipsModule,
+    MatDividerModule
+  ],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.scss',
+  styleUrls: ['./navbar.scss']
 })
-export class Navbar {
+export class Navbar implements OnInit {
+  currentUser$: Observable<User | null>;
+  isAuthenticated = false;
+  isAdmin = false;
 
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.currentUser$ = this.authService.currentUser$;
+  }
+
+  ngOnInit(): void {
+   
+    this.currentUser$.subscribe(user => {
+      this.isAuthenticated = !!user;
+      this.isAdmin = user?.is_admin || false;
+    });
+  }
+
+  logout(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Logout error:', err);
+        
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  navigateTo(path: string): void {
+    this.router.navigate([path]);
+  }
 }

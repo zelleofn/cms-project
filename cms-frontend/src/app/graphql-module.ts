@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Apollo, APOLLO_OPTIONS } from 'apollo-angular';
+import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache, ApolloClientOptions } from '@apollo/client/core';
 import { environment } from '../environments/environment';
@@ -9,17 +9,15 @@ const uri = environment.graphqlUrl;
 
 export function createApollo(httpLink: HttpLink): ApolloClientOptions {  
   const auth = setContext(async (_, { headers }) => {
-  const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
 
-  return {
-    headers: {
-      ...headers, 
-      authorization: token ? `Bearer ${token}` : '',
-    }
-  };
-});
-
-  
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : '',
+      }
+    };
+  });
 
   return {
     link: auth.concat(httpLink.create({ uri })),
@@ -41,7 +39,6 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions {
 }
 
 @NgModule({
-  imports: [Apollo],
   providers: [
     {
       provide: APOLLO_OPTIONS,

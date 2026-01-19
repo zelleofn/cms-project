@@ -1,1 +1,67 @@
-<p>posts works!</p>
+<div class="posts-container">
+  <mat-toolbar color="primary">
+    <h1>All Posts</h1>
+    <span class="spacer"></span>
+    <button mat-raised-button color="accent" routerLink="/admin">
+      <mat-icon>add</mat-icon>
+      New Post
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <div *ngIf="loading" class="loading">
+      <mat-spinner></mat-spinner>
+      <p>Loading posts</p>
+    </div>
+
+    <div *ngIf="error" class="error">
+      <mat-icon>error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button (click)="loadArticles()">Retry</button>
+    </div>
+
+    <div *ngIf="!loading && !error">
+      <mat-card>
+        <mat-card-content>
+          <table mat-table [dataSource]="articles" class="mat-elevation-z2">
+            <!-- Title Column -->
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef>Title</th>
+              <td mat-cell *matCellDef="let article">{{ article.title }}</td>
+            </ng-container>
+
+            <!-- Author Column -->
+            <ng-container matColumnDef="author">
+              <th mat-header-cell *matHeaderCellDef>Author</th>
+              <td mat-cell *matCellDef="let article">{{ article.author || 'Unknown' }}</td>
+            </ng-container>
+
+            <!-- Published Date Column -->
+            <ng-container matColumnDef="publishedDate">
+              <th mat-header-cell *matHeaderCellDef>Published</th>
+              <td mat-cell *matCellDef="let article">{{ formatDate(article.publishedDate) }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let article">
+                <button mat-icon-button (click)="viewArticle(article.id)" color="primary">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="clickable-row"></tr>
+          </table>
+
+          <div *ngIf="articles.length === 0" class="no-data">
+            <mat-icon>inbox</mat-icon>
+            <p>No posts found</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

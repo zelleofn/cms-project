@@ -1,0 +1,54 @@
+.admin-container {
+  min-height: 100vh;
+}
+
+.content {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  button {
+    min-width: 120px;
+  }
+}
+
+.success-message {
+  background-color: #4caf50;
+  color: white;
+  margin-bottom: 1rem;
+
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.error-message {
+  background-color: #f44336;
+  color: white;
+  margin-bottom: 1rem;
+
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
