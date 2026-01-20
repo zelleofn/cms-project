@@ -27,7 +27,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './register.html',
   styleUrls: ['./register.scss']
 })
-export class Register implements OnInit {
+export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
   error: string | null = null;

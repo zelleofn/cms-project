@@ -24,7 +24,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './posts.html',
   styleUrls: ['./posts.scss']
 })
-export class Posts implements OnInit {
+export class PostsComponent implements OnInit {
   articles: Article[] = [];
   loading = true;
   error: string | null = null;

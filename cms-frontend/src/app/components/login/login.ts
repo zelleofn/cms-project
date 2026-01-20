@@ -28,7 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
-export class Login implements OnInit {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   error: string | null = null;

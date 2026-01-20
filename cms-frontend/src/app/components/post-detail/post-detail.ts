@@ -25,7 +25,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   templateUrl: './post-detail.html',
   styleUrls: ['./post-detail.scss']
 })
-export class PostDetail implements OnInit {
+export class PostDetailComponent implements OnInit {
   article: Article | null = null;
   loading = true;
   error: string | null = null;

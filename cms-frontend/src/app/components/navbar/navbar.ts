@@ -27,7 +27,7 @@ import { MatDividerModule } from '@angular/material/divider';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']
 })
-export class Navbar implements OnInit {
+export class NavbarComponent implements OnInit {
   currentUser$: Observable<User | null>;
   isAuthenticated = false;
   isAdmin = false;

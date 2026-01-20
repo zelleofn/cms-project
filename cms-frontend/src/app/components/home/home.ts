@@ -29,7 +29,7 @@ import { MatListModule } from '@angular/material/list';
   templateUrl: './home.html',
   styleUrls: ['./home.scss']
 })
-export class Home implements OnInit {
+export class HomeComponent implements OnInit {
   articles: Article[] = [];
   wordpressPosts: any[] = [];
   loading = true;

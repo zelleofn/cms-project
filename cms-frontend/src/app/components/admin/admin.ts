@@ -30,7 +30,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   templateUrl: './admin.html',
   styleUrls: ['./admin.scss']
 })
-export class Admin implements OnInit {
+export class AdminComponent implements OnInit {
   articleForm: FormGroup;
   editMode = false;
   editId: number | null = null;
