@@ -30,8 +30,8 @@
         <mat-grid-tile *ngFor="let article of articles">
           <mat-card>
             <mat-card-header>
-              <mat-card-title>{{ article.title }}</mat-card-title>
-              <mat-card-subtitle>{{ article.author || 'Unknown' }}</mat-card-subtitle>
+              <mat-card-title>{{ article?.title }}</mat-card-title>
+              <mat-card-subtitle>{{ article?.author || 'Unknown' }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <p>{{ article.content | slice:0:150 }}...</p>

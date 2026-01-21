@@ -43,18 +43,23 @@ export class HomeComponent implements OnInit {
   }
 
   loadArticles(): void {
-    this.articleService.getArticles(5).subscribe({
-      next: (articles) => {
+  this.loading = true;
+  this.articleService.getArticles(5).subscribe({
+    next: (articles) => {
+     
+      setTimeout(() => {
         this.articles = articles;
         this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Failed to load articles';
-        this.loading = false;
-        console.error('Error loading articles:', err);
-      }
-    });
-  }
+      }, 0);
+    },
+    error: (err) => {
+      this.error = 'Failed to load articles';
+      this.loading = false;
+      console.error('Error loading articles:', err);
+    }
+  });
+}
+  
 
   loadWordPressPosts(): void {
     this.articleService.getWordPressPosts(5).subscribe({
