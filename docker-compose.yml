@@ -77,8 +77,8 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       
       WORDPRESS_DB_URL: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
-      WORDPRESS_URL: http://wordpress:80
-      WORDPRESS_GRAPHQL_URL: http://wordpress:80/graphql
+      WORDPRESS_URL: ${WORDPRESS_URL}
+      WORDPRESS_GRAPHQL_URL: ${WORDPRESS_GRAPHQL_URL}
       
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}

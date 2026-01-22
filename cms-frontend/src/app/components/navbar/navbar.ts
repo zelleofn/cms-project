@@ -47,18 +47,24 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  logout(): void {
-    this.authService.logout().subscribe({
-      next: () => {
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        console.error('Logout error:', err);
-        
-        this.router.navigate(['/login']);
-      }
-    });
-  }
+ logout(): void {
+  this.authService.logout().subscribe({
+    next: () => {
+      this.finalizeLogout();
+    },
+    error: (err) => {
+      console.error('Logout error from server:', err);
+    
+      this.finalizeLogout();
+    }
+  });
+}
+
+private finalizeLogout(): void {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('user');
+  this.router.navigate(['/login']);
+}
 
   navigateTo(path: string): void {
     this.router.navigate([path]);

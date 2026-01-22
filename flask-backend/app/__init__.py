@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify  # Must import these
+from flask import Flask, request, jsonify  
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from graphql_server.flask import GraphQLView
@@ -47,7 +47,7 @@ def create_app(config_name='development'):
             schema=schema,
             graphiql=True, 
             get_context=lambda: {
-                'wp_graphql_url': app.config.get('WORDPRESS_GRAPHQL_URL')
+                'WORDPRESS_GRAPHQL_URL': app.config.get('WORDPRESS_GRAPHQL_URL')
             }
         )
     )

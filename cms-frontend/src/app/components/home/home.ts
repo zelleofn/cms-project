@@ -10,6 +10,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -30,44 +31,36 @@ import { MatListModule } from '@angular/material/list';
   styleUrls: ['./home.scss']
 })
 export class HomeComponent implements OnInit {
-  articles: Article[] = [];
+  
   wordpressPosts: any[] = [];
   loading = true;
   error: string | null = null;
 
-  constructor(private articleService: ArticleService) {}
+  constructor(private articleService: ArticleService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.loadArticles();
+  
     this.loadWordPressPosts();
   }
 
-  loadArticles(): void {
-  this.loading = true;
-  this.articleService.getArticles(5).subscribe({
-    next: (articles) => {
-     
-      setTimeout(() => {
-        this.articles = articles;
-        this.loading = false;
-      }, 0);
-    },
-    error: (err) => {
-      this.error = 'Failed to load articles';
-      this.loading = false;
-      console.error('Error loading articles:', err);
-    }
-  });
-}
+
   
 
-  loadWordPressPosts(): void {
+loadWordPressPosts(): void {
+    this.loading = true;
     this.articleService.getWordPressPosts(5).subscribe({
       next: (posts) => {
-        this.wordpressPosts = posts;
+       
+        this.wordpressPosts =  posts.filter(p => p !== null);
+        this.loading = false;
+        this.cdr.detectChanges();
+        console.log('WordPress posts loaded:', this.wordpressPosts);
       },
       error: (err) => {
         console.error('Error loading WordPress posts:', err);
+        this.error = 'Failed to load posts';
+        this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }

@@ -8,9 +8,6 @@ export const GET_ARTICLES = gql`
       title
       content
       author
-      publishedDate
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -22,13 +19,9 @@ export const GET_ARTICLE = gql`
       title
       content
       author
-      publishedDate
-      createdAt
-      updatedAt
     }
   }
 `;
-
 
 export const GET_PRODUCTS = gql`
   query GetProducts($category: String) {
@@ -63,6 +56,7 @@ export const GET_WORDPRESS_POSTS = gql`
   query GetWordPressPosts($limit: Int) {
     wordpressPosts(limit: $limit) {
       id
+      databaseId
       title
       content
       excerpt
@@ -76,6 +70,7 @@ export const GET_WORDPRESS_POST = gql`
   query GetWordPressPost($postId: String!) {
     wordpressPost(postId: $postId) {
       id
+      databaseId
       title
       content
       excerpt
@@ -104,7 +99,7 @@ export const CREATE_ARTICLE = gql`
 
 export const UPDATE_ARTICLE = gql`
   mutation UpdateArticle($articleId: Int!, $title: String, $content: String, $author: String) {
-    updateArticle(articleId: $articleId, title: $title, content: $content, author: $author) {
+    updateArticle(article_id: $articleId, title: $title, content: $content, author: $author) { 
       success
       message
       article {
@@ -117,10 +112,9 @@ export const UPDATE_ARTICLE = gql`
     }
   }
 `;
-
 export const DELETE_ARTICLE = gql`
   mutation DeleteArticle($articleId: Int!) {
-    deleteArticle(articleId: $articleId) {
+    deleteArticle(article_id: $articleId) { 
       success
       message
     }

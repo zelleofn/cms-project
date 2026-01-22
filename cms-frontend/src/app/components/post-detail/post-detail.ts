@@ -26,7 +26,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   styleUrls: ['./post-detail.scss']
 })
 export class PostDetailComponent implements OnInit {
-  article: Article | null = null;
+  article: any | null = null; 
   loading = true;
   error: string | null = null;
   isAdmin = false;
@@ -42,26 +42,29 @@ export class PostDetailComponent implements OnInit {
     this.isAdmin = this.authService.isAdmin();
     
     this.route.params.subscribe(params => {
-      const id = +params['id'];
-      this.loadArticle(id);
+      const id = params['id'];
+      this.loadWordPressPost(id);
     });
   }
 
-  loadArticle(id: number): void {
-    this.loading = true;
-    this.articleService.getArticle(id).subscribe({
-      next: (article) => {
-        this.article = article;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Failed to load article';
-        this.loading = false;
-        console.error('Error:', err);
-      }
-    });
-  }
-
+loadWordPressPost(id: string): void {
+  this.loading = true;
+  this.articleService.getWordPressPost(id).subscribe({
+    next: (data) => {
+      console.log('WordPress Detail Data:', data);
+      
+      
+      this.article = data; 
+      
+      this.loading = false;
+    },
+    error: (err) => {
+      console.error('GraphQL Error:', err);
+      this.error = 'Failed to load post content.';
+      this.loading = false;
+    }
+  });
+}
   editArticle(): void {
     if (this.article) {
       this.router.navigate(['/admin'], { 

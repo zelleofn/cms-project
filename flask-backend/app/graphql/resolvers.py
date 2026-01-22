@@ -7,17 +7,17 @@ from app.utils.cache import cache_graphql_query, cache
 
 class Query:
   
-    
     @staticmethod
-    @cache_graphql_query(ttl=300, key_prefix="wp_posts")
+    @cache_graphql_query(ttl=300, key_prefix="wp_posts") 
     def resolve_wordpress_posts(root, info, limit: int = 10) -> List[dict]:
-        wp_url = info.context.get('wp_graphql_url')
+        wp_url = info.context.get('WORDPRESS_GRAPHQL_URL')
         
         query = """
-        query GetPosts($limit: Int) {
-          posts(first: $limit) {
+        query GetPosts($first: Int) {
+          posts(first: $first) {
             nodes {
               id
+              databaseId
               title
               content
               excerpt
@@ -35,26 +35,31 @@ class Query:
         try:
             response = requests.post(
                 wp_url,
-                json={'query': query, 'variables': {'limit': limit}},
+                json={'query': query, 'variables': {'first': limit}},
                 timeout=10
             )
             response.raise_for_status()
-            
             data = response.json()
-            return data.get('data', {}).get('posts', {}).get('nodes', [])
+            
+            
+            posts = data.get('data', {}).get('posts', {}).get('nodes', [])
+            
+            print(f"DEBUG - WP Response: Found {len(posts)} posts")
+            return posts
         except Exception as e:
             print(f"Error fetching WordPress posts: {e}")
             return []
-    
+
     @staticmethod
-    @cache_graphql_query(ttl=300, key_prefix="wp_post")
+    @cache_graphql_query(ttl=300, key_prefix="wp_post") 
     def resolve_wordpress_post(root, info, post_id: str) -> Optional[dict]:
-        wp_url = info.context.get('wp_graphql_url')
+        wp_url = info.context.get('WORDPRESS_GRAPHQL_URL')
         
         query = """
         query GetPost($id: ID!) {
           post(id: $id, idType: DATABASE_ID) {
             id
+            databaseId
             title
             content
             excerpt
@@ -64,15 +69,9 @@ class Query:
                 name
               }
             }
-            customFields {
-              fieldGroupName
-              customField1
-              customField2
-            }
           }
         }
         """
-        
         try:
             response = requests.post(
                 wp_url,
@@ -80,12 +79,12 @@ class Query:
                 timeout=10
             )
             response.raise_for_status()
-            
             data = response.json()
+            print(f"DEBUG - WP Response for {post_id}: {data}")
             return data.get('data', {}).get('post')
         except Exception as e:
             print(f"Error fetching WordPress post: {e}")
-            return None
+            return None        
     
     
     @staticmethod
@@ -100,9 +99,9 @@ class Query:
     
     @staticmethod
     @cache_graphql_query(ttl=300, key_prefix="article")
-    def resolve_article(root, info, article_id: int) -> Optional[Article]:
+    def resolve_article(root, info, articleId: int) -> Optional[Article]:
         try:
-            article = Article.query.filter_by(id=article_id).first()
+            article = Article.query.filter_by(id=articleId).first()
             return article
         except Exception as e:
             print(f"Error fetching article: {e}")
@@ -175,10 +174,10 @@ class Mutation:
             }
     
     @staticmethod
-    def resolve_update_article(root, info, article_id: int, title: Optional[str] = None, 
+    def resolve_update_article(root, info, articleId: int, title: Optional[str] = None, 
                               content: Optional[str] = None, author: Optional[str] = None) -> dict:
         try:
-            article = Article.query.filter_by(id=article_id).first()
+            article = Article.query.filter_by(id=articleId).first()
             
             if not article:
                 return {
@@ -196,7 +195,7 @@ class Mutation:
             
             db.session.commit()
             
-            cache.delete_pattern(f"graphql:*article*{article_id}*")
+            cache.delete_pattern(f"graphql:*article*{articleId}*")
             cache.delete_pattern("graphql:*articles*")
             
             return {
@@ -213,9 +212,9 @@ class Mutation:
             }
     
     @staticmethod
-    def resolve_delete_article(root, info, article_id: int) -> dict:
+    def resolve_delete_article(root, info, articleId: int) -> dict:
         try:
-            article = Article.query.filter_by(id=article_id).first()
+            article = Article.query.filter_by(id=articleId).first()
             
             if not article:
                 return {
@@ -226,7 +225,7 @@ class Mutation:
             db.session.delete(article)
             db.session.commit()
             
-            cache.delete_pattern(f"graphql:*article*{article_id}*")
+            cache.delete_pattern(f"graphql:*article*{articleId}*")
             cache.delete_pattern("graphql:*articles*")
             
             return {

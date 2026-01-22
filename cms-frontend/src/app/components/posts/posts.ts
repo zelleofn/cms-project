@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-posts',
@@ -27,37 +28,39 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./posts.scss']
 })
 export class PostsComponent implements OnInit {
-  articles: Article[] = [];
+  wordpressPosts: any[] = [];
   loading = true;
   error: string | null = null;
   
-  displayedColumns: string[] = ['title', 'author', 'publishedDate', 'actions'];
+  displayedColumns: string[] = ['title', 'date', 'actions'];
 
   constructor(
     private articleService: ArticleService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadArticles();
+    this.loadWordPressPosts();
   }
 
-  loadArticles(): void {
+loadWordPressPosts(): void {
     this.loading = true;
-    this.articleService.getArticles(50).subscribe({
-      next: (articles) => {
-        this.articles = articles;
+    this.articleService.getWordPressPosts(5).subscribe({
+      next: (posts) => {
+        this.wordpressPosts = posts.filter(p => p !== null);
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
-        this.error = 'Failed to load articles';
         this.loading = false;
-        console.error('Error:', err);
+        this.error = 'Error fetching posts';
+        this.cdr.detectChanges();
       }
     });
   }
 
-  viewArticle(id: number): void {
+  viewArticle(id: string | number): void {
     this.router.navigate(['/posts', id]);
   }
 

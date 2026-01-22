@@ -7,8 +7,10 @@ import {
   CREATE_ARTICLE,
   UPDATE_ARTICLE,
   DELETE_ARTICLE,
-  GET_WORDPRESS_POSTS
+  GET_WORDPRESS_POSTS,
+  GET_WORDPRESS_POST
 } from '../graphql/queries';
+
 
 export interface Article {
   id?: number;
@@ -53,6 +55,19 @@ export class ArticleService {
         map(result => result.data?.article ?? null)
       );
   }
+
+getWordPressPost(postId: string): Observable<any | null> {
+  return this.apollo
+    .watchQuery<{ wordpressPost: any }>({
+      query: GET_WORDPRESS_POST,
+      variables: { 
+        postId: postId 
+      }
+    })
+    .valueChanges.pipe(
+      map(result => result.data?.wordpressPost ?? null)
+    );
+}
 
   createArticle(title: string, content: string, author?: string): Observable<MutationResponse> {
     return this.apollo

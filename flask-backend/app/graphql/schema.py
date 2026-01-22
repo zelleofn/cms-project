@@ -24,16 +24,23 @@ class TeamMemberType(SQLAlchemyObjectType):
 
 class WordPressPostType(graphene.ObjectType):
     id = graphene.String()
+    database_id = graphene.Int()
     title = graphene.String()
     content = graphene.String()
     excerpt = graphene.String()
     date = graphene.String()
     author_name = graphene.String()
     
+    
     def resolve_author_name(self, info):
+        
         author = self.get('author', {})
+        if not author: return "Unknown"
         node = author.get('node', {})
         return node.get('name', 'Unknown')
+
+    def resolve_database_id(self, info):
+        return self.get('databaseId')    
 
 
 class CustomFieldType(graphene.ObjectType):

@@ -32,8 +32,8 @@
         <mat-card-title class="article-title">{{ article.title }}</mat-card-title>
         <mat-card-subtitle>
           <div class="metadata">
-            <span><mat-icon>person</mat-icon> {{ article.author || 'Unknown Author' }}</span>
-            <span><mat-icon>calendar_today</mat-icon> {{ formatDate(article.publishedDate) }}</span>
+            <span><mat-icon>person</mat-icon> {{ article.authorName || 'WordPress Author' }}</span>
+            <span><mat-icon>calendar_today</mat-icon> {{ formatDate(article.date) }}</span>
           </div>
         </mat-card-subtitle>
       </mat-card-header>
@@ -41,14 +41,12 @@
       <mat-divider></mat-divider>
 
       <mat-card-content>
-        <div class="article-content">
-          {{ article.content }}
-        </div>
+        <div class="article-content" [innerHTML]="article.content"></div>
 
         <mat-divider></mat-divider>
 
         <div class="article-footer">
-          <p><small>Last updated: {{ formatDate(article.updatedAt) }}</small></p>
+          <p><small>Published on: {{ formatDate(article.date) }}</small></p>
         </div>
       </mat-card-content>
 
@@ -58,6 +56,6 @@
           Edit Article
         </button>
       </mat-card-actions>
-    </mat-card>
-  </div>
+    </mat-card> 
+    </div>
 </div>
