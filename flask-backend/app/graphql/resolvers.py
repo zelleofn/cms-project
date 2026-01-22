@@ -44,7 +44,7 @@ class Query:
             
             posts = data.get('data', {}).get('posts', {}).get('nodes', [])
             
-            print(f"DEBUG - WP Response: Found {len(posts)} posts")
+            
             return posts
         except Exception as e:
             print(f"Error fetching WordPress posts: {e}")
@@ -80,7 +80,7 @@ class Query:
             )
             response.raise_for_status()
             data = response.json()
-            print(f"DEBUG - WP Response for {post_id}: {data}")
+            
             return data.get('data', {}).get('post')
         except Exception as e:
             print(f"Error fetching WordPress post: {e}")

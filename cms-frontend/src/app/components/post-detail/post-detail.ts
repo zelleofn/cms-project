@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-post-detail',
@@ -35,7 +36,8 @@ export class PostDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private articleService: ArticleService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -51,17 +53,21 @@ loadWordPressPost(id: string): void {
   this.loading = true;
   this.articleService.getWordPressPost(id).subscribe({
     next: (data) => {
-      console.log('WordPress Detail Data:', data);
+      
       
       
       this.article = data; 
       
       this.loading = false;
+      
+      
+      this.cdr.detectChanges(); 
     },
     error: (err) => {
       console.error('GraphQL Error:', err);
       this.error = 'Failed to load post content.';
       this.loading = false;
+      this.cdr.detectChanges();
     }
   });
 }

@@ -54,7 +54,7 @@ loadWordPressPosts(): void {
         this.wordpressPosts =  posts.filter(p => p !== null);
         this.loading = false;
         this.cdr.detectChanges();
-        console.log('WordPress posts loaded:', this.wordpressPosts);
+        
       },
       error: (err) => {
         console.error('Error loading WordPress posts:', err);
