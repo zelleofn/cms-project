@@ -5,6 +5,7 @@ from app import db
 from app.utils.cache import cache_graphql_query, cache
 
 
+
 class Query:
   
     @staticmethod
@@ -41,15 +42,13 @@ class Query:
             response.raise_for_status()
             data = response.json()
             
-            
             posts = data.get('data', {}).get('posts', {}).get('nodes', [])
-            
-            
             return posts
         except Exception as e:
             print(f"Error fetching WordPress posts: {e}")
             return []
 
+    
     @staticmethod
     @cache_graphql_query(ttl=300, key_prefix="wp_post") 
     def resolve_wordpress_post(root, info, post_id: str) -> Optional[dict]:
@@ -84,7 +83,7 @@ class Query:
             return data.get('data', {}).get('post')
         except Exception as e:
             print(f"Error fetching WordPress post: {e}")
-            return None        
+            return None   
     
     
     @staticmethod
