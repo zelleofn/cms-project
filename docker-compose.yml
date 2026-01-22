@@ -49,8 +49,6 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
-      WORDPRESS_TABLE_PREFIX: wp_
-      WORDPRESS_DEBUG: 'true'
     volumes:
       - wordpress_data:/var/www/html
       - ./wordpress-plugins:/var/www/html/wp-content/plugins
@@ -70,23 +68,41 @@ services:
       - "5000:5000"
     environment:
       FLASK_ENV: ${FLASK_ENV}
+
       FLASK_APP: app.py
+
       SECRET_KEY: ${SECRET_KEY}
+
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
-      
+
+     
+
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      
+
+     
+
       WORDPRESS_DB_URL: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+
       WORDPRESS_URL: ${WORDPRESS_URL}
+
       WORDPRESS_GRAPHQL_URL: ${WORDPRESS_GRAPHQL_URL}
-      
+
+     
+
       REDIS_HOST: ${REDIS_HOST}
+
       REDIS_PORT: ${REDIS_PORT}
+
       REDIS_PASSWORD: ${REDIS_PASSWORD}
+
       CACHE_DEFAULT_TTL: ${CACHE_DEFAULT_TTL:-300}
-      
+
+     
+
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-      
+
+     
+
       ADMIN_TOKEN: ${ADMIN_TOKEN}
     volumes:
       - ./flask-backend:/app
@@ -97,6 +113,28 @@ services:
         condition: service_healthy
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  cms-frontend:
+    build:
+      context: ./cms-frontend
+      dockerfile: Dockerfile
+    container_name: angular-cms
+    ports:
+      - "4200:80" 
+    networks:
+      - cms-network
+    depends_on:
+      - flask-backend
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: cms-redis
+    networks:
+      - cms-network
     restart: unless-stopped
 
 networks:
@@ -105,8 +143,5 @@ networks:
 
 volumes:
   mysql_data:
-    driver: local
   postgres_data:
-    driver: local
   wordpress_data:
-    driver: local
