@@ -108,14 +108,13 @@ getWordPressPost(postId: string): Observable<any | null> {
       );
   }
 
-  getWordPressPosts(limit: number = 10): Observable<any[]> {
-    return this.apollo
-      .watchQuery<{ wordpressPosts: any[] }>({
-        query: GET_WORDPRESS_POSTS,
-        variables: { limit }
-      })
-      .valueChanges.pipe(
-       map(result => result.data?.wordpressPosts ?? [])
-      );
-  }
+getWordPressPosts(limit: number = 5): Observable<any[]> {
+  return this.apollo
+    .watchQuery<{ wordpressPosts: any[] }>({
+      query: GET_WORDPRESS_POSTS,
+      variables: { limit },
+      fetchPolicy: 'cache-and-network' 
+    })
+    .valueChanges.pipe(map(result => result.data?.wordpressPosts ?? []));
+}
 }

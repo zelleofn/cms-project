@@ -23,6 +23,7 @@ import { ChangeDetectorRef } from '@angular/core';
     MatCardModule,
     MatTableModule,
     MatProgressSpinnerModule
+    
   ],
   templateUrl: './posts.html',
   styleUrls: ['./posts.scss']
@@ -46,19 +47,25 @@ export class PostsComponent implements OnInit {
 
 loadWordPressPosts(): void {
     this.loading = true;
+    this.error = null;
+    this.wordpressPosts = []; 
+    
     this.articleService.getWordPressPosts(5).subscribe({
       next: (posts) => {
-        this.wordpressPosts = posts.filter(p => p !== null);
-        this.loading = false;
-        this.cdr.detectChanges();
+        
+        setTimeout(() => {
+          this.wordpressPosts = (posts || []).filter(p => p !== null);
+          this.loading = false;
+          this.cdr.detectChanges();
+        }, 500); 
       },
       error: (err) => {
         this.loading = false;
-        this.error = 'Error fetching posts';
+        this.error = 'Failed to connect to WordPress.';
         this.cdr.detectChanges();
       }
     });
-  }
+}
 
   viewArticle(id: string | number): void {
     this.router.navigate(['/posts', id]);
