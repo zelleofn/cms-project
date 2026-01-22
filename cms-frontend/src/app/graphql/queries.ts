@@ -6,7 +6,6 @@ export const GET_ARTICLES = gql`
     articles(limit: $limit, offset: $offset) {
       id
       title
-      content
       author
     }
   }
@@ -23,33 +22,7 @@ export const GET_ARTICLE = gql`
   }
 `;
 
-export const GET_PRODUCTS = gql`
-  query GetProducts($category: String) {
-    products(category: $category) {
-      id
-      name
-      description
-      price
-      sku
-      createdAt
-      updatedAt
-    }
-  }
-`;
 
-
-export const GET_TEAM_MEMBERS = gql`
-  query GetTeamMembers {
-    teamMembers {
-      id
-      name
-      jobTitle
-      bio
-      createdAt
-      updatedAt
-    }
-  }
-`;
 
 
 export const GET_WORDPRESS_POSTS = gql`
@@ -58,10 +31,9 @@ export const GET_WORDPRESS_POSTS = gql`
       id
       databaseId
       title
-      content
-      excerpt
+      excerpt   
       date
-      authorName
+      authorName   
     }
   }
 `;
