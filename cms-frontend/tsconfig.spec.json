@@ -5,11 +5,16 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": [
-      "vitest/globals"
-    ]
+      "jest",
+      "node"
+    ],
+    "isolatedModules": true,        
+    "emitDecoratorMetadata": false,
+    "esModuleInterop": true   
   },
   "include": [
+    "src/**/*.spec.ts",
     "src/**/*.d.ts",
-    "src/**/*.spec.ts"
+    "src/setup-jest.ts" 
   ]
 }
