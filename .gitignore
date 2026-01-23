@@ -128,3 +128,6 @@ Thumbs.db
 
 # Local files
 Checklist.txt
+
+#Kubernetes
+k8s/secrets.yaml

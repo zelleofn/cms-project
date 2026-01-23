@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cms-config
+data:
+  FLASK_ENV: "production"
+  FLASK_APP: "app.py"
+  DATABASE_URL: "postgresql://user:pass@db:5432/flask_db"
+  WORDPRESS_GRAPHQL_URL: "http://wordpress:80/graphql"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  CACHE_DEFAULT_TTL: "300"
