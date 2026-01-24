@@ -76,7 +76,7 @@ def create_app(config_name='development'):
             }
         }, 200
 
-     with app.app_context():
+    with app.app_context():
         try:
             db.create_all()
             app.logger.info("Database tables created successfully")
