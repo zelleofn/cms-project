@@ -6,11 +6,11 @@ import { environment } from '../environments/environment';
 import { setContext } from '@apollo/client/link/context';
 
 const uri = environment.graphqlUrl;
+console.log('GraphQL URI:', uri);
 
 export function createApollo(httpLink: HttpLink): ApolloClientOptions {  
   const auth = setContext(async (_, { headers }) => {
     const token = localStorage.getItem('access_token');
-
     return {
       headers: {
         ...headers,
