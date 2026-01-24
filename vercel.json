@@ -1,5 +1,0 @@
-{
-  "buildCommand": "cd cms-frontend && ng build",
-  "outputDirectory": "cms-frontend/dist/cms-frontend/browser",
-  "framework": "angular"
-}
