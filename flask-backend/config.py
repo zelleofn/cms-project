@@ -44,24 +44,8 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-   
     DEBUG = False
     TESTING = False
-    
-    
-    @property
-    def SECRET_KEY(self):
-        secret_key = os.getenv('SECRET_KEY')
-        if not secret_key:
-            raise ValueError("SECRET_KEY must be set in production!")
-        return secret_key
-    
-    @property
-    def JWT_SECRET_KEY(self):
-        jwt_key = os.getenv('JWT_SECRET_KEY')
-        if not jwt_key:
-            raise ValueError("JWT_SECRET_KEY must be set in production!")
-        return jwt_key
 
 
 class TestingConfig(Config):
