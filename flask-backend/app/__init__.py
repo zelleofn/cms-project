@@ -76,7 +76,12 @@ def create_app(config_name='development'):
             }
         }, 200
 
-    with app.app_context():
-        db.create_all()
+     with app.app_context():
+        try:
+            db.create_all()
+            app.logger.info("Database tables created successfully")
+        except Exception as e:
+            app.logger.warning(f"Could not create database tables: {e}")
+            app.logger.info("App will start without database - check DATABASE_URL")
     
     return app
