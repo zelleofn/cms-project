@@ -1,0 +1,11 @@
+{
+  "buildCommand": "cd cms-frontend && npm run build",
+  "outputDirectory": "cms-frontend/dist/cms-frontend",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html",
+      "status": 200
+    }
+  ]
+}
