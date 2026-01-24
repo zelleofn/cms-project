@@ -1,8 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://productionapi.com',
-  graphqlUrl: 'https://productionapi.com/graphql',
-  wordpressUrl: 'https://wordpress.com'
+  apiUrl: 'https://flask-cms-backend.onrender.com',
+  graphqlUrl: 'https://flask-cms-backend.onrender.com/graphql',
+  wordpressUrl: 'https://dev-cms-project-backend-angular.pantheonsite.io'
 };
-
-// change the above urls later on
