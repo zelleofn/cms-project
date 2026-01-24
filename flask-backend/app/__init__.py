@@ -33,13 +33,9 @@ def create_app(config_name='development'):
     @app.before_request
     def check_graphql_auth():
         if request.path == '/graphql' and request.method == 'POST':
-            data = request.get_json() or {}
-            query = data.get('query', '').strip()
-            
-            if query.startswith('mutation'):
-                auth_header = request.headers.get('Authorization')
-                if not auth_header:
-                    return jsonify({'error': 'Authentication required'}), 401
+            auth_header = request.headers.get('Authorization')
+            if not auth_header:
+                return jsonify({'error': 'Authentication required'}), 401
 
     app.add_url_rule(
         '/graphql',
