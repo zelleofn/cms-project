@@ -19,7 +19,6 @@ def create_app(config_name='development'):
     else:
         app.logger.warning("  Redis connection failed - caching disabled")
     
-    
     from app.routes import api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
     
@@ -31,29 +30,28 @@ def create_app(config_name='development'):
 
     from app.graphql.schema import schema
 
-    
     @app.before_request
     def check_graphql_auth():
-    if request.path == '/graphql' and request.method == 'POST':
-        data = request.get_json() or {}
-        query = data.get('query', '').strip()
-        
-        if query.startswith('mutation'):
-            auth_header = request.headers.get('Authorization')
-            if not auth_header:
-                return jsonify({'error': 'Authentication required'}), 401
+        if request.path == '/graphql' and request.method == 'POST':
+            data = request.get_json() or {}
+            query = data.get('query', '').strip()
+            
+            if query.startswith('mutation'):
+                auth_header = request.headers.get('Authorization')
+                if not auth_header:
+                    return jsonify({'error': 'Authentication required'}), 401
 
-app.add_url_rule(
-    '/graphql',
-    view_func=GraphQLView.as_view(
-        'graphql',
-        schema=schema,
-        graphiql=True, 
-        get_context=lambda: {
-            'WORDPRESS_GRAPHQL_URL': app.config.get('WORDPRESS_GRAPHQL_URL')
-        }
+    app.add_url_rule(
+        '/graphql',
+        view_func=GraphQLView.as_view(
+            'graphql',
+            schema=schema,
+            graphiql=True, 
+            get_context=lambda: {
+                'WORDPRESS_GRAPHQL_URL': app.config.get('WORDPRESS_GRAPHQL_URL')
+            }
+        )
     )
-)
     
     @app.route('/health', methods=['GET'])
     def health_check():
