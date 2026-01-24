@@ -1,0 +1,40 @@
+name: CI Suite (Flask & Angular)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install pytest
+      - name: Run Pytest
+        run: pytest
+
+  frontend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install Dependencies
+        run: |
+          cd cms-frontend
+          npm install
+      - name: Run Jest
+        run: |
+          cd cms-frontend
+          npm test -- --watchAll=false
