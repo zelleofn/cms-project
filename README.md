@@ -4,7 +4,7 @@ Full-stack Headless CMS built with Angular frontend and Flask GraphQL backend, p
 
 ## Live Demo
 
-**Frontend:** https://cms-project-tan.vercel.app
+**Demo:** https://cms-project-tan.vercel.app
 
 ## Tech Stack
 
