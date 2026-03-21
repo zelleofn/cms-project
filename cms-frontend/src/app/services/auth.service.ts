@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Observable, BehaviorSubject, tap, timeout, catchError, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface User {
@@ -41,8 +41,8 @@ export class AuthService {
       try {
         const user = JSON.parse(userJson);
         this.currentUserSubject.next(user);
-      } catch (e) {
-        console.error('Error parsing user from storage', e);
+      } catch {
+        localStorage.removeItem('current_user');
       }
     }
   }
@@ -55,18 +55,26 @@ export class AuthService {
       first_name: firstName,
       last_name: lastName
     }).pipe(
+      timeout(30000),
       tap(response => {
         if (response.success && response.access_token) {
           this.handleAuthSuccess(response);
         }
+      }),
+      catchError(err => {
+        if (err.name === 'TimeoutError') {
+          return throwError(() => ({
+            error: { error: 'Server is starting up. Please try again in a moment.' }
+          }));
+        }
+        return throwError(() => err);
       })
     );
   }
 
   login(usernameOrEmail: string, password: string): Observable<AuthResponse> {
     const payload: any = { password };
-    
-    
+
     if (usernameOrEmail.includes('@')) {
       payload.email = usernameOrEmail;
     } else {
@@ -74,10 +82,19 @@ export class AuthService {
     }
 
     return this.http.post<AuthResponse>(`${this.apiUrl}/api/auth/login`, payload).pipe(
+      timeout(30000),
       tap(response => {
         if (response.success && response.access_token) {
           this.handleAuthSuccess(response);
         }
+      }),
+      catchError(err => {
+        if (err.name === 'TimeoutError') {
+          return throwError(() => ({
+            error: { error: 'Server is starting up. Please try again in a moment.' }
+          }));
+        }
+        return throwError(() => err);
       })
     );
   }

@@ -52,9 +52,7 @@ export class NavbarComponent implements OnInit {
     next: () => {
       this.finalizeLogout();
     },
-    error: (err) => {
-      console.error('Logout error from server:', err);
-    
+    error: () => {
       this.finalizeLogout();
     }
   });

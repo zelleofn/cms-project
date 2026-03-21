@@ -39,22 +39,18 @@ export class HomeComponent implements OnInit {
   constructor(private articleService: ArticleService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    console.log('HomeComponent initialized');
     this.loadWordPressPosts();
   }
 
   loadWordPressPosts(): void {
     this.loading = true;
-    console.log('Loading WordPress posts...');
     this.articleService.getWordPressPosts(5).subscribe({
       next: (posts) => {
-        console.log('Posts loaded:', posts);
         this.wordpressPosts = posts.filter(p => p !== null);
         this.loading = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Error loading WordPress posts:', err);
+      error: () => {
         this.error = 'Failed to load posts';
         this.loading = false;
         this.cdr.detectChanges();

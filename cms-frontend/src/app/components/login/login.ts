@@ -79,7 +79,6 @@ export class LoginComponent implements OnInit {
       error: (err) => {
         this.loading = false;
         this.error = err.error?.error || 'Invalid credentials. Please try again.';
-        console.error('Login error:', err);
       }
     });
   }

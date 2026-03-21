@@ -64,7 +64,6 @@ loadWordPressPost(id: string): void {
       this.cdr.detectChanges(); 
     },
     error: (err) => {
-      console.error('GraphQL Error:', err);
       this.error = 'Failed to load post content.';
       this.loading = false;
       this.cdr.detectChanges();
@@ -92,7 +91,6 @@ loadWordPressPost(id: string): void {
       },
       error: (err) => {
         alert('Failed to delete article');
-        console.error('Error:', err);
       }
     });
   }
