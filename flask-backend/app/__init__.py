@@ -11,7 +11,7 @@ def create_app(config_name='development'):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    # CORS is configured in app.py to avoid double-init
     db.init_app(app)
     
     if cache.is_connected():
@@ -32,6 +32,8 @@ def create_app(config_name='development'):
 
     @app.before_request
     def check_graphql_auth():
+        if request.path == '/graphql' and request.method == 'OPTIONS':
+            return
         if request.path == '/graphql' and request.method == 'POST':
             auth_header = request.headers.get('Authorization')
             if not auth_header:
@@ -56,8 +58,7 @@ def create_app(config_name='development'):
             'database': 'connected',
             'redis': 'connected' if cache.is_connected() else 'disconnected'
         }
-        status_code = 200 if cache.is_connected() else 503
-        return health_status, status_code
+        return health_status, 200
 
     @app.route('/', methods=['GET'])
     def index():

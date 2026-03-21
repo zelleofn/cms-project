@@ -7,7 +7,7 @@ env = os.getenv('FLASK_ENV', 'development')
 app = create_app(env)
 
 
-allowed_origins = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:4200').split(',')
+allowed_origins = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:4200,https://cms-project-tan.vercel.app').split(',')
 
 CORS(app, resources={r"/*": {"origins": allowed_origins}}, supports_credentials=True)
 
