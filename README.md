@@ -2,9 +2,7 @@
 
 Full-stack Headless CMS built with Angular frontend and Flask GraphQL backend, powered by WordPress as a datasource(Content published via WordPress sites). WordPress content is consumed via a GraphQL API and displayed through a custom Angular interface. WordPress serves as the content database, then pulled via WPGraphQL into the Flask backend, cached with Redis, and served to the Angular frontend.
 
-## Live Demo
 
-**Demo:** https://cms-project-tan.vercel.app
 
 ## Tech Stack
 
